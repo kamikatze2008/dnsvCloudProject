@@ -65,8 +65,8 @@
         <td></td>
     </tr>
 </table>
-
-<form action="${pageContext.request.contextPath}/MainServlet" method="get">
+<br/>
+<form action="/MainServlet" method="get">
     <button type="submit" name="submit" value="logout">Log Out</button>
 </form>
 </body>

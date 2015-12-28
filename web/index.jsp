@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>LogIn</h1>
-<form action="${pageContext.request.contextPath}/MainServlet" method="get">
+<form action="/MainServlet" method="get">
     <c:if test="${not empty registered}">
         You've just passed registration. <br/>
     </c:if>

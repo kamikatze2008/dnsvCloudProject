@@ -27,9 +27,7 @@ public class Course {
         if (id != course.id) return false;
         if (lectionNumber != course.lectionNumber) return false;
         if (!users.equals(course.users)) return false;
-        if (!courseName.equals(course.courseName)) return false;
-        return day.equals(course.day);
-
+        return courseName.equals(course.courseName) && day.equals(course.day);
     }
 
     @Override

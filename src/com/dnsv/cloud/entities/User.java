@@ -37,4 +37,20 @@ public class User {
         result = 31 * result + entity.hashCode();
         return result;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Entity getEntity() {
+        return entity;
+    }
 }

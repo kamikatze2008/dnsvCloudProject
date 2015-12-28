@@ -4,7 +4,6 @@ import com.dnsv.cloud.entities.User;
 import com.google.appengine.api.utils.SystemProperty;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,13 +21,12 @@ public class MainServlet extends HttpServlet {
     private static final String TEACHER = "teacher";
     private static final String STUDENT = "student";
 
+    private static final String ID = "id";
     private static final String NAME = "name";
     private static final String PASS = "password";
     private static final String CONF_PASS = "confirm";
     private static final String SECRET_WORD = "secret";
     private static final String SECRET_STRING = "dnsv";
-
-    private User user;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -49,7 +47,7 @@ public class MainServlet extends HttpServlet {
     private void processRequests(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String submitString = request.getParameter(SUBMIT);
-        String dispatcherUrl;
+        String dispatcherUrl = null;
         switch (submitString) {
             case LOGIN:
                 dispatcherUrl = loginBehavior(request, response);
@@ -58,11 +56,9 @@ public class MainServlet extends HttpServlet {
                 dispatcherUrl = registerBehavior(request, response);
                 break;
             case LOGOUT:
-                request.getSession(false);
-                dispatcherUrl = "/login.jsp";
+                request.getSession().invalidate();
+                dispatcherUrl = "/index.jsp";
                 break;
-            default:
-                dispatcherUrl = "/login.jsp";
         }
         RequestDispatcher requestDispatcher = request.getRequestDispatcher(dispatcherUrl);
         requestDispatcher.forward(request, response);
@@ -72,13 +68,14 @@ public class MainServlet extends HttpServlet {
         String dispatcherUrl;
         String name = request.getParameter(NAME);
         String password = request.getParameter(PASS);
-        if ((user = checkCredentials(name, password)) != null) {
-            request.getSession();
-            request.setAttribute(NAME, name);
-            request.setAttribute(PASS, password);
+        User user = checkCredentials(name, password);
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute(NAME, name);
+            session.setAttribute(ID, user.getId());
             dispatcherUrl = "/schedule.jsp";
         } else {
-            dispatcherUrl = "/login.jsp";
+            dispatcherUrl = "/index.jsp";
         }
         return dispatcherUrl;
     }
