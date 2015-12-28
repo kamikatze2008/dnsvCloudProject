@@ -1,14 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page isELIgnored="false" %>
 <html>
 <head>
     <title>dnsvCloudProject</title>
 </head>
-
+<body>
 <h1>LogIn</h1>
-<form action="/MainServlet" method="get">
+<form action="${pageContext.request.contextPath}/MainServlet" method="get">
     <c:if test="${not empty registered}">
         You've just passed registration. <br/>
     </c:if>

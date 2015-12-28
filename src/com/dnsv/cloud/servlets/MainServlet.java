@@ -9,14 +9,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.*;
-
 
 public class MainServlet extends HttpServlet {
     private static final String SUBMIT = "submit";
     private static final String LOGIN = "login";
     private static final String REGISTER = "register";
+    private static final String LOGOUT = "logout";
 
     private static final String TEACHER = "teacher";
     private static final String STUDENT = "student";
@@ -27,7 +28,7 @@ public class MainServlet extends HttpServlet {
     private static final String SECRET_WORD = "secret";
     private static final String SECRET_STRING = "dnsv";
 
-    private final ServletContext context = getServletContext();
+    private User user;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -48,7 +49,7 @@ public class MainServlet extends HttpServlet {
     private void processRequests(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String submitString = request.getParameter(SUBMIT);
-        String dispatcherUrl = null;
+        String dispatcherUrl;
         switch (submitString) {
             case LOGIN:
                 dispatcherUrl = loginBehavior(request, response);
@@ -56,8 +57,14 @@ public class MainServlet extends HttpServlet {
             case REGISTER:
                 dispatcherUrl = registerBehavior(request, response);
                 break;
+            case LOGOUT:
+                request.getSession(false);
+                dispatcherUrl = "/login.jsp";
+                break;
+            default:
+                dispatcherUrl = "/login.jsp";
         }
-        RequestDispatcher requestDispatcher = context.getRequestDispatcher(dispatcherUrl);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(dispatcherUrl);
         requestDispatcher.forward(request, response);
     }
 
@@ -65,7 +72,10 @@ public class MainServlet extends HttpServlet {
         String dispatcherUrl;
         String name = request.getParameter(NAME);
         String password = request.getParameter(PASS);
-        if (checkCredentials(name, password) != null) {
+        if ((user = checkCredentials(name, password)) != null) {
+            request.getSession();
+            request.setAttribute(NAME, name);
+            request.setAttribute(PASS, password);
             dispatcherUrl = "/schedule.jsp";
         } else {
             dispatcherUrl = "/login.jsp";
@@ -111,7 +121,7 @@ public class MainServlet extends HttpServlet {
 
     private void doInsertInUserTable(String name, String password, String type) throws IOException, SQLException, ClassNotFoundException {
         Connection connection = getDbConnection();
-        String statement = "INSERT INTO users (username, userpass, entity) values(?,?,?)";
+        String statement = "INSERT INTO users (username, userpass, entity) VALUES(?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(statement);
         preparedStatement.setString(1, name);
         preparedStatement.setString(2, password);
@@ -123,7 +133,7 @@ public class MainServlet extends HttpServlet {
     private User checkCredentials(String name, String password) throws IOException, SQLException, ClassNotFoundException {
         Connection connection = getDbConnection();
         User user = null;
-        String statement = "SELECT * FROM users WHERE username=? and userpass=?";
+        String statement = "SELECT * FROM users WHERE username=? AND userpass=?";
         PreparedStatement preparedStatement = connection.prepareStatement(statement);
         preparedStatement.setString(1, name);
         preparedStatement.setString(2, password);
