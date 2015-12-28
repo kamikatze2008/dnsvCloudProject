@@ -1,6 +1,6 @@
 package com.dnsv.cloud.servlets;
 
-import com.dnsv.cloud.entities.Entities;
+import com.dnsv.cloud.entities.User;
 import com.google.appengine.api.utils.SystemProperty;
 
 import javax.servlet.RequestDispatcher;
@@ -33,6 +33,7 @@ public class MainServlet extends HttpServlet {
         try {
             processRequests(request, response);
         } catch (Exception e) {
+            response.getWriter().println(e.getMessage());
         }
     }
 
@@ -61,10 +62,10 @@ public class MainServlet extends HttpServlet {
     }
 
     private String loginBehavior(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String dispatcherUrl = null;
+        String dispatcherUrl;
         String name = request.getParameter(NAME);
         String password = request.getParameter(PASS);
-        if (checkCredentials(name, password)) {
+        if (checkCredentials(name, password) != null) {
             dispatcherUrl = "/schedule.jsp";
         } else {
             dispatcherUrl = "/login.jsp";
@@ -101,7 +102,6 @@ public class MainServlet extends HttpServlet {
                 SystemProperty.Environment.Value.Production) {
             Class.forName("com.mysql.jdbc.GoogleDriver");
             url = "jdbc:google:mysql://dnsvcloudproject:dnsvcloudproject/dnsvDb?user=root";
-//            return DriverManager.getConnection("jdbc:google:mysql://dnsvcloudproject:dnsvcloudproject/dnsvDb", "root", "");
         } else {
             Class.forName("com.mysql.jdbc.Driver");
             url = "jdbc:mysql://127.0.0.1:3306/dnsvDb?user=root";
@@ -120,10 +120,10 @@ public class MainServlet extends HttpServlet {
         connection.close();
     }
 
-    private boolean checkCredentials(String name, String password) throws IOException, SQLException, ClassNotFoundException {
+    private User checkCredentials(String name, String password) throws IOException, SQLException, ClassNotFoundException {
         Connection connection = getDbConnection();
-        boolean flag;
-        String statement = "SELECT username, userpass FROM users WHERE username=? and userpass=?";
+        User user = null;
+        String statement = "SELECT * FROM users WHERE username=? and userpass=?";
         PreparedStatement preparedStatement = connection.prepareStatement(statement);
         preparedStatement.setString(1, name);
         preparedStatement.setString(2, password);
@@ -133,17 +133,15 @@ public class MainServlet extends HttpServlet {
             String nameDb = resultSet.getString(resultSet.findColumn("username"));
             String passDb = resultSet.getString(resultSet.findColumn("userpass"));
             String entity = resultSet.getString(resultSet.findColumn("entity"));
-            Entities entities;
-            if ("teacher".equals(entity)) {
-                entities = new Entities(id, name, password, Entities.Entity.TEACHER);
-            } else {
-                entities = new Entities(id, name, password, Entities.Entity.STUDENT);
+            if (nameDb != null && passDb != null) {
+                if ("teacher".equals(entity)) {
+                    user = new User(id, nameDb, passDb, User.Entity.TEACHER);
+                } else {
+                    user = new User(id, nameDb, passDb, User.Entity.STUDENT);
+                }
             }
-            flag = true;
-        } else {
-            flag = false;
         }
         connection.close();
-        return flag;
+        return user;
     }
 }
