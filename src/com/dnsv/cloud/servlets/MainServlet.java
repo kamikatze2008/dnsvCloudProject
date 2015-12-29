@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,7 +130,7 @@ public class MainServlet extends HttpServlet {
         return dispatcherUrl;
     }
 
-    private Connection getDbConnection() throws IOException, ClassNotFoundException, SQLException {
+    public static Connection getDbConnection() throws IOException, ClassNotFoundException, SQLException {
         String url;
         if (SystemProperty.environment.value() ==
                 SystemProperty.Environment.Value.Production) {
@@ -198,7 +197,7 @@ public class MainServlet extends HttpServlet {
         return schedule;
     }
 
-    private User getTeacher(Connection connection, int teacherId) throws IOException, SQLException, ClassNotFoundException {
+    public static User getTeacher(Connection connection, int teacherId) throws IOException, SQLException, ClassNotFoundException {
         User teacher = null;
         String statement = "SELECT * FROM users WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(statement);
