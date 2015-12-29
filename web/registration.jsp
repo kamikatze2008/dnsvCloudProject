@@ -14,7 +14,7 @@
     <input title="confirm_password" name="confirm" type="password"><br/>
     Secret word (necessary if you're teacher):<br/>
     <input title="secret_word" type="password"><br/>
-    <button type="submit" name="submit" value="register">Log In</button>
+    <button type="submit" name="submit" value="register">Register</button>
 </form>
 <br/>
 </body>
