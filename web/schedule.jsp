@@ -8,7 +8,7 @@
 <body>
 <h1>Schedule</h1>
 <h2>Welcome, <c:out value="${sessionScope.name}"/>!</h2>
-<table border="5" width="800px">
+<table border="5" width="700px">
     <tr>
         <td></td>
         <td>Monday</td>
