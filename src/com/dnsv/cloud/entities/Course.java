@@ -4,16 +4,56 @@ import java.util.ArrayList;
 
 public class Course {
     int id;
-    ArrayList<User> users;
+    User teacher;
     String courseName;
     String day;
     int lectionNumber;
 
-    public Course(int id, ArrayList<User> users, String courseName, String day, int lectionNumber) {
+    public Course(int id, User teacher, String courseName, String day, int lectionNumber) {
         this.id = id;
-        this.users = users;
+        this.teacher = teacher;
         this.courseName = courseName;
         this.day = day;
+        this.lectionNumber = lectionNumber;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public User getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public int getLectionNumber() {
+        return lectionNumber;
+    }
+
+    public void setLectionNumber(int lectionNumber) {
         this.lectionNumber = lectionNumber;
     }
 
@@ -24,19 +64,21 @@ public class Course {
 
         Course course = (Course) o;
 
-        if (id != course.id) return false;
-        if (lectionNumber != course.lectionNumber) return false;
-        if (!users.equals(course.users)) return false;
-        return courseName.equals(course.courseName) && day.equals(course.day);
+        if (getId() != course.getId()) return false;
+        if (getLectionNumber() != course.getLectionNumber()) return false;
+        if (!getTeacher().equals(course.getTeacher())) return false;
+        if (!getCourseName().equals(course.getCourseName())) return false;
+        return getDay().equals(course.getDay());
+
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + users.hashCode();
-        result = 31 * result + courseName.hashCode();
-        result = 31 * result + day.hashCode();
-        result = 31 * result + lectionNumber;
+        int result = getId();
+        result = 31 * result + getTeacher().hashCode();
+        result = 31 * result + getCourseName().hashCode();
+        result = 31 * result + getDay().hashCode();
+        result = 31 * result + getLectionNumber();
         return result;
     }
 }
