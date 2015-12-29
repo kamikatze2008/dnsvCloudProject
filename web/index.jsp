@@ -15,7 +15,7 @@
     <input title="Name" name="name" value="${name}" type="text"><br/>
     Enter password:<br/>
     <input title="Password" value="${password}" name="password" type="password"><br/><br/>
-    <button type="submit" name="submit" value="login">Submit</button>
+    <button type="submit" name="submit" value="login">LogIn</button>
 </form>
 <a href="registration.jsp">Registration</a>
 </body>
