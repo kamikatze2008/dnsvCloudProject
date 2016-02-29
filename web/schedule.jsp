@@ -363,30 +363,28 @@
                 </c:when>
             </c:choose>
         </td>
-        <td>
-            <c:choose>
-                <c:when test="${not empty sessionScope.schedule['Friday5']}">
-                    ${sessionScope.schedule['Friday5']}
-                </c:when>
-                <c:when test="${sessionScope.entity eq 'TEACHER'}">
-                    <form action="/MainServlet" method="get">
+        <form action="/MainServlet" method="get">
+            <td>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.schedule['Friday5']}">
+                        ${sessionScope.schedule['Friday5']}
+                    </c:when>
+                    <c:when test="${sessionScope.entity eq 'TEACHER'}">
                         <button type="submit" name="submit" value="Friday5">Create Maths lecture</button>
-                    </form>
-                </c:when>
-            </c:choose>
-        </td>
-        <td>
-            <c:choose>
-                <c:when test="${not empty sessionScope.schedule['Saturday5']}">
-                    ${sessionScope.schedule['Saturday5']}
-                </c:when>
-                <c:when test="${sessionScope.entity eq 'TEACHER'}">
-                    <form action="/MainServlet" method="get">
+                    </c:when>
+                </c:choose>
+            </td>
+            <td>
+                <c:choose>
+                    <c:when test="${not empty sessionScope.schedule['Saturday5']}">
+                        ${sessionScope.schedule['Saturday5']}
+                    </c:when>
+                    <c:when test="${sessionScope.entity eq 'TEACHER'}">
                         <button type="submit" name="submit" value="Saturday5">Create Maths lecture</button>
-                    </form>
-                </c:when>
-            </c:choose>
-        </td>
+                    </c:when>
+                </c:choose>
+            </td>
+        </form>
     </tr>
 </table>
 <br/>
